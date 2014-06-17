@@ -1,0 +1,158 @@
+{% extends "idea/idea-base.html" %}
+
+
+{%block "css_files" %}
+<link rel="stylesheet" href="{{ STATIC_URL }}idea/css/selectize.default.css">
+{{ block.super }}
+{% endblock %}
+
+
+{% block "content" %}
+
+        <div id="content" class="idea-add ic" role="main">
+            <div class="row">
+                <div class="logo span7 section project-title">
+                    <a href="{% url 'idea:idea_list' %}">IdeaBox</a>
+                </div><!-- /logo -->
+            </div>
+            <div class="project-add">
+                <h1>Share your idea</h1>
+                <a id="activate-help" class="visuallyhidden">Toggle instructions for each field.</a>
+                <form action="{% block "form-url" %}{% url 'idea:add_idea' %}{% endblock %}" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="{{ field.html_name }}">
+                            {% if 'challenge-checkbox' == field.html_name %}
+                                {{ field }}
+                                <label for="{{ field.auto_id }}">
+                                    {{ field.label }}
+                                </label>
+                            {% elif 'banner' == field.html_name %}
+                                {{ field }}
+                            {% else %}
+                                <label for="{{ field.auto_id }}">
+                                    {{ field.label }}
+                                </label>
+                                {{ field }}
+                                <div class="textAreaCountMessage">
+                                    <span class="help-block" id="{{ field.auto_id }}_textcount"></span>
+                                </div>
+                                <div class="form-field-footer">
+                                    {% if field.help_text %}
+                                        <div class="help_text">
+                                            <span>{{ field.help_text }}</span>
+                                        </div>
+                                    {% endif %}
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <span id="submit-buttons">
+                        {% block "submit-buttons" %}
+                        <input type="submit" class="btn" id="add-idea-btn" value="Submit this idea">
+                        <input type="button" onclick="window.location = '{% url "idea:idea_list" %}';" class="btn secondary-action" value="I changed my mind">
+                        {% endblock %}
+                    </span>
+                </form>
+            </div><!-- /project-add -->
+        </div><!-- /main -->
+
+{% endblock %}
+
+{% block "js_ready" %}
+    if ($('#id_challenge-checkbox').is(":checked")) {
+        $('#id_banner').addClass("active");
+    };
+
+    $('#id_challenge-checkbox').change(function(){
+        if($(this).is(":checked")) {
+            $('#id_banner').addClass("active");
+        } else {
+            $('#id_banner').prop('selectedIndex',0);
+            $('#id_banner').removeClass("active");
+        }
+    });
+
+    var textAreas = document.getElementsByTagName("TEXTAREA");
+    for (var i = 0; i < textAreas.length; i++) {
+        thisArea = document.getElementById(textAreas[i].getAttribute("id"));
+        setCounter(thisArea);
+    };
+    function setCounter(obj) {
+        $(obj).keyup(function(){countText(this);});
+        $(obj).blur(function(){countText(this);}); //handle mouse-only actions
+    };
+    function countText(elem) {
+        textAreaLength = elem.value.length;
+        counterPretty = textAreaLength.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        counterSign = ("id_" + elem.id + "_textcount").toString().slice(3);
+        document.getElementById(counterSign).innerHTML = counterPretty + " characters";
+    };
+
+    $("#activate-help").click(function() {
+        $(".help_text span").toggle();
+    });
+
+    $('#id_tags').selectize({
+        valueField: 'value',
+        labelField: 'label',
+        searchField: ['label'],
+        delimiter: ',',
+        persist: false,
+        create: function(input) {
+            return {
+                value: input,
+                text: input,
+                label: input
+            }
+        },
+        load: function(query, callback) {
+            if (!query.length) return callback();
+            $.ajax({
+                url: '/search/tags/json/model/idea/?term=' + query,
+                type: 'GET',
+                dataType: 'json',
+                error: function() {
+                    callback();
+                },
+                success: function(res) {
+                    callback(res);
+                }
+            });
+        }
+    });
+
+    //  Show help_text, hide error text when input box is focused
+    function field_focus(field) {
+        field.siblings('.form-field-footer').children('.errorlist').css("visibility", "hidden");
+        field.siblings('.form-field-footer').children('.help_text').css("visibility", "visible");
+        field.removeClass("input-error").removeClass("populated").addClass("input-active")
+    };
+    function field_blur(field) {
+        field.siblings('.form-field-footer').children('.help_text').css("visibility", "hidden");
+        field.removeClass("input-active")
+    }
+    $('.project-add').find(".form-control")
+        .focus(function(){
+            field_focus($(this));
+        })
+        .blur(function(){
+            field_blur($(this));
+    });
+    $('.project-add').find(".selectize-input").children("input")
+        .focus(function(){
+            field_focus($('.selectize-control'));
+        })
+        .blur(function(){
+            field_blur($('.selectize-control'));
+    });
+
+{% endblock %}
+
+{% block "js_scripts" %}
+    <script src="{{ STATIC_URL }}idea/js/functions.js"></script>
+    <script src="{{ STATIC_URL }}idea/js/selectize.min.js"></script>
+    <!--[if lt IE 9]><script src="{{ STATIC_URL }}idea/js/es5-shim.min.js"></script><![endif]-->
+{% block "design_js_scripts" %}{% endblock %}
+{% endblock %}
