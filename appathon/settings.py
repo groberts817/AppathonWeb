@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'comments',
     'registration',
     'push_notifications',
+    'django_cron',
 )
 
 COMMENTS_APP = 'comments'
@@ -62,9 +63,20 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+CRON_CLASSES = [
+    "idea.search_indexes.MyCronJob",
+]
+
 ROOT_URLCONF = 'appathon.urls'
 
 WSGI_APPLICATION = 'appathon.wsgi.application'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'AgilexIdeaBox'
+EMAIL_HOST_PASSWORD = 'AgilexIdeaBox1'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
 
 HAYSTACK_CONNECTIONS = {
     'default': {

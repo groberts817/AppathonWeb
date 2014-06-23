@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^device/register/(?P<device_type>\w+)/$', 'appathon.views.register_device', name='register_device'),
 )
 
 if 'idea' in settings.INSTALLED_APPS and 'django.contrib.comments' in settings.INSTALLED_APPS and 'haystack' in settings.INSTALLED_APPS:
