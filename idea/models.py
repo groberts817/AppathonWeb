@@ -78,6 +78,9 @@ class IdeaManager(models.Manager):
             #   Don't use annotate() as it conflicts with extra()
             'vote_count': """
                 SELECT count(*) FROM idea_vote WHERE idea_id = idea_idea.id
+            """,
+            'downvote_count': """
+                SELECT count(*) FROM idea_downvote WHERE idea_id = idea_idea.id
             """
         }, select_params=[idea_type.id])
 
@@ -101,8 +104,11 @@ class Idea(UserTrackable):
         Make it easy for supporters to find your idea.  See how many other
         ideas have the same tags for potential collaboration or a little
         healthy competition.""")
+		
     voters = models.ManyToManyField(User, through="Vote", null=True,
                                     related_name="idea_vote_creator")
+    downvoters = models.ManyToManyField(User, through="DownVote", null=True,
+                                    related_name="idea_downvote_creator")
 
     def __unicode__(self):
         return u'%s' % self.title
@@ -141,15 +147,20 @@ class Idea(UserTrackable):
 
     objects = IdeaManager()
 
-# We can only upvote.
+# We can upvote and downvote.
 UP_VOTE = 1
+DOWN_VOTE = 1
 VOTE_CHOICES = ((u'+1', UP_VOTE),)
+DOWNVOTE_CHOICES = ((u'+1', DOWN_VOTE),)
 
 
 class Vote(UserTrackable):
     vote = models.SmallIntegerField(choices=VOTE_CHOICES, default=1)
     idea = models.ForeignKey(Idea)
 
+class DownVote(UserTrackable):
+    downvote = models.SmallIntegerField(choices=DOWNVOTE_CHOICES, default=1)
+    idea = models.ForeignKey(Idea)
 
 class Config(models.Model):
     key = models.CharField(max_length=50, unique=True)

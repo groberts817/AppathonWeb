@@ -93,6 +93,11 @@ class UpVoteForm(forms.Form):
     next = forms.CharField(max_length=512, widget=forms.HiddenInput())
 
 
+class DownVoteForm(forms.Form):
+    idea_id = forms.IntegerField(widget=forms.HiddenInput())
+    next = forms.CharField(max_length=512, widget=forms.HiddenInput())
+
+
 class IdeaTagForm(forms.Form):
     tags = forms.CharField(max_length=512,
                            widget=forms.TextInput(attrs={'class': 'tags_autocomplete'}))
