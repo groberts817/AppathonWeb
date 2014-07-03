@@ -12,6 +12,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpRespons
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
 from django.db.models import Q
+from push_notifications.models import APNSDevice, GCMDevice
 
 from idea.forms import IdeaForm, IdeaTagForm, UpVoteForm, DownVoteForm
 from idea.models import Idea, State, Vote, DownVote, Banner, Config
@@ -71,6 +72,13 @@ def list(request, sort_or_state=None):
 
     ideas = Idea.objects.related_with_counts()
 
+
+    device = GCMDevice.objects.all()
+    device.send_message({"foo": "bar"}) # The message will be sent and received as json.
+    
+    device = APNSDevice.objects.all()
+    device.send_message("You've got mail") # The message may only be sent as text.
+
     #   Tag Filter
     for tag_id in tag_ids:
         ideas = ideas.filter(tags__pk=tag_id)
@@ -79,6 +87,9 @@ def list(request, sort_or_state=None):
     if sort_or_state == 'archived':
         ideas = ideas.filter(state=State.objects.get(name='Archive')
                              ).order_by('-vote_count')
+    elif sort_or_state == 'pending':
+        ideas = ideas.filter(state=State.objects.get(name='Pending')
+                             ).order_by('-time')
     else:
         ideas = ideas.filter(state=State.objects.get(name='Active'))
         if sort_or_state == 'vote':
@@ -135,6 +146,7 @@ def list(request, sort_or_state=None):
         'tags': tags,  # list of popular tags
         'banner': banner,
         'about_text': about_text,
+        'is_approver': request.user.groups.filter(name='Approvers'),
     })
 
 
@@ -305,7 +317,7 @@ def add_idea(request, banner_id=None):
             return HttpResponseRedirect(reverse('idea:idea_detail',
                                                 args=(matching_ideas[0].id,)))
         idea = Idea(creator=request.user, state=state_helper.get_first_state())
-        if idea.state.name == 'Active':
+        if idea.state.name == 'Pending':
             form = IdeaForm(request.POST, instance=idea)
             if form.is_valid():
                 new_idea = form.save()
