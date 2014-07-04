@@ -83,6 +83,13 @@ def list(request, sort_or_state=None):
     for tag_id in tag_ids:
         ideas = ideas.filter(tags__pk=tag_id)
 
+    is_approver = request.user.groups.filter(name='Approvers')
+    if not sort_or_state:
+        if is_approver:
+            sort_or_state = 'pending'
+        else:
+            sort_or_state = 'trending'
+
     #   URL Filter - either archive or one of the sorts
     if sort_or_state == 'archived':
         ideas = ideas.filter(state=State.objects.get(name='Archive')
@@ -141,13 +148,13 @@ def list(request, sort_or_state=None):
         about_text = ""
 
     return _render(request, 'idea/list.html', {
-        'sort_or_state': sort_or_state,
-        'ideas': page,
-        'tags': tags,  # list of popular tags
-        'banner': banner,
-        'about_text': about_text,
-        'is_approver': request.user.groups.filter(name='Approvers'),
-    })
+                   'sort_or_state': sort_or_state,
+                   'ideas': page,
+                   'tags': tags,  # list of popular tags
+                   'banner': banner,
+                   'about_text': about_text,
+                   'is_approver': is_approver,
+                   })
 
 
 def vote_up(idea, user):

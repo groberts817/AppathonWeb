@@ -55,11 +55,10 @@ class IdeaForm(forms.ModelForm):
         self.cleaned_data['tags'] = []
         instance.save()
  
- #message = ('New Idea2', 'New idea posted! http://localhost:8000/idea/detail/' + str(instance.id), 'AgilexIdeaBox@gmail.com', User.objects.values_list('email',flat=True))
-        send_mail('New Idea2', 'New idea posted! http://localhost:8000/idea/detail/' + str(instance.id), 'AgilexIdeaBox@gmail.com', User.objects.values_list('email',flat=True), fail_silently=True)
+ #        send_mail('New Idea2', 'New idea posted! http://ec2-54-88-16-5.compute-1.amazonaws.com/idea/detail/' + str(instance.id), 'AgilexIdeaBox@gmail.com', User.objects.values_list('email',flat=True), fail_silently=True)
 
-        devices = GCMDevice.objects.all()
-        devices.send_message({"message": "New idea posted!", "url":"http://localhost:8000/idea/detail/" + str(instance.id)})
+#       devices = GCMDevice.objects.all()
+#        devices.send_message({"message": "New idea posted!", "url":"http://ec2-54-88-16-5.compute-1.amazonaws.com/idea/detail/" + str(instance.id)})
         try:
             for t in tags:
                 add_tags(instance, t, None, instance.creator, 'idea')

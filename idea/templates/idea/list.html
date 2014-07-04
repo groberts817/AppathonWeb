@@ -19,6 +19,9 @@
                         <h2>Main Navigation for IdeaBox</h2>
                     </div> <!-- /visuallyhidden -->
                     <ul class="section-nav">
+                        {% if is_approver %}
+                        <li {% if sort_or_state == 'pending' %}class="active"{% endif %}><a href="{% url 'idea:idea_list' "pending" %}">Pending</a></li>
+                        {% endif %}
                             <li {% if sort_or_state == 'trending' %}class="active"{% endif %}><a href="{% url 'idea:idea_list' "trending" %}">Trending</a></li>
                             <li {% if sort_or_state == 'vote' %}class="active"{% endif %}><a href="{% url 'idea:idea_list' "vote" %}">Likes</a></li>
                             <li {% if sort_or_state == 'recent' %}class="active"{% endif %}><a href="{% url 'idea:idea_list' "recent" %}">Recent</a></li>
@@ -40,6 +43,15 @@
                                     <span class="btn-archive">Archived</span>
                                 {% elif request.user in idea.voters.all %}
                                     <span class="btn btn-voted">Liked</span>
+                                {% elif idea.state.name == 'Pending' %}
+                                    <form action="{% url 'idea:upvote_idea' %}" method=POST>
+                                        {% csrf_token %}
+                                        <input type="hidden" name="idea_id" value="{{idea.id}}"/>
+                                        <input type="hidden" name="next" value="{% url 'idea:idea_list' %}"/>
+                                        <input type="submit" class="btn btn-vote" value="Approve" id="approve"/>
+                                        <br>
+                                        <input type="submit" class="btn btn-vote" value="Reject" id="reject"/>
+                                    </form>
                                 {% else %}
                                     <form action="{% url 'idea:upvote_idea' %}" method=POST>
                                         {% csrf_token %}
