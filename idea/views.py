@@ -14,10 +14,10 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q
 from push_notifications.models import APNSDevice, GCMDevice
 
-from idea.forms import IdeaForm, IdeaTagForm, UpVoteForm
-from idea.models import Idea, State, Vote, Banner, Config
+from idea.forms import IdeaForm, IdeaTagForm, UpVoteForm, DownVoteForm
+from idea.models import Idea, State, Vote, DownVote, Banner, Config
 from idea.utility import state_helper
-from idea.models import UP_VOTE
+from idea.models import UP_VOTE, DOWN_VOTE
 
 try:
     from core.taggit.models import Tag, TaggedItem
@@ -163,6 +163,12 @@ def vote_up(idea, user):
     vote.creator = user
     vote.save()
 
+def vote_down(idea, user):
+    downvote = DownVote()
+    downvote.idea = idea
+    downvote.creator = user
+    downvote.save()
+
 
 @require_POST
 @login_required
@@ -183,6 +189,27 @@ def up_vote(request):
             vote_up(idea, request.user)
 
         return HttpResponseRedirect(next_url)
+		
+@require_POST
+@login_required
+def down_vote(request):
+    form = DownVoteForm(request.POST)
+
+    if form.is_valid():
+        idea_id = form.cleaned_data['idea_id']
+        next_url = form.cleaned_data['next']
+
+        idea = Idea.objects.get(pk=idea_id)
+
+        # Down voting is idempotent
+        existing_votes = Vote.objects.filter(
+            idea=idea, creator=request.user, vote=DOWN_VOTE)
+
+        if not existing_votes.exists():
+            vote_down(idea, request.user)
+
+        return HttpResponseRedirect(next_url)
+
 
 
 def more_like_text(text, klass):
@@ -248,6 +275,14 @@ def detail(request, idea_id):
         except (ObjectDoesNotExist, SiteProfileNotAvailable):
             v.profile = None
 
+    downvoters = idea.downvoters.all()
+
+    for dv in downvoters:
+        try:
+            dv.profile = dv.get_profile()
+        except (ObjectDoesNotExist, SiteProfileNotAvailable):
+            dv.profile = None
+
     idea_type = ContentType.objects.get(app_label="idea", model="idea")
 
     tags = idea.tags.extra(select={
@@ -269,10 +304,11 @@ def detail(request, idea_id):
 
     return _render(request, 'idea/detail.html', {
         'idea': idea,  # title, body, user name, user photo, time
-        'support': request.user in voters,
+        'support': request.user in voters or request.user in downvoters,
         'tags': tags,
         'tags_created_by_user': tags_created_by_user,
         'voters': voters,
+        'downvoters': downvoters,
         'tag_form': tag_form
     })
 
@@ -320,8 +356,8 @@ def add_idea(request, banner_id=None):
             form = IdeaForm(initial={'title': idea_title, 'banner': banner})
             form.fields["banner"].queryset = current_banners
         return _render(request, 'idea/add.html', {
-            'form': form,
-            'similar': [r.object for r in more_like_text(idea_title, Idea)]
+            'form': form#,
+            #'similar': [r.object for r in more_like_text(idea_title, Idea)]
         })
 
 

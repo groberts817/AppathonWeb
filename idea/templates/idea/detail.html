@@ -20,7 +20,7 @@
                         {% if idea.state.name == 'Archive' %}
                             <span class="btn btn-archive">Archived</span>
                         {% elif support %}
-                            <span class="btn btn-voted">Liked</span>
+                            <span class="btn btn-voted">Voted</span>
                         {% else %}
                             <form action="{% url 'idea:upvote_idea' %}" method=POST>
                                 {% csrf_token %}
@@ -29,7 +29,24 @@
                                 <input type="submit" class="btn btn-vote" value="Like" id="vote_up"/>
                             </form>
                         {% endif %}
-                    </div><!-- /bitton -->
+                    </div>
+					<div class="count">{{downvoters|length}}</div>
+					<div class="phrase">Unlike{{downvoters|pluralize:",s"}}</div>
+					<div class="action">
+						{% if idea.state.name == 'Archive' %}
+							<span class="btn-archive">Archived</span>
+						{% elif support %}
+							<span class="btn btn-voted">Voted</span>
+						{% else %}
+							<form action="{% url 'idea:downvote_idea' %}" method=POST>
+								{% csrf_token %}
+								<input type="hidden" name="idea_id" value="{{idea.id}}"/>
+								<input type="hidden" name="next" value="{% url 'idea:idea_list' %}"/>
+								<input type="submit" class="btn btn-vote" value="UnLike" id="vote_down"/>
+							</form>
+						{% endif %}
+					</div>
+					<!-- /bitton -->
                 </div><!-- /idea-votes -->
                 <article class="single-idea-entry span">
                     <div class="row span9">

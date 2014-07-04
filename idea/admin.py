@@ -1,8 +1,9 @@
 from django.contrib import admin
-from idea.models import Idea, State, Vote, Banner, Config
+from idea.models import Idea, State, Vote, DownVote, Banner, Config
 
 idea_actions = []
 vote_actions = []
+downvote_actions = []
 banner_actions = []
 
 try:
@@ -13,6 +14,9 @@ try:
                                                      'text',
                                                      'creator',
                                                      'banner']))
+    vote_actions.append(export_as_csv_action("CSV Export",
+                                             fields=['creator',
+                                                     'idea']))
     vote_actions.append(export_as_csv_action("CSV Export",
                                              fields=['creator',
                                                      'idea']))
@@ -39,6 +43,11 @@ class VoteAdmin(admin.ModelAdmin):
     search_fields = ['creator', 'idea']
     actions = vote_actions
 
+class DownVoteAdmin(admin.ModelAdmin):
+    list_display = ('creator', 'idea')
+    search_fields = ['creator', 'idea']
+    actions = downvote_actions
+
 class BannerAdmin(admin.ModelAdmin):
     list_display = ('title', 'start_date', 'end_date')
     search_fields = ['title', 'text']
@@ -48,4 +57,5 @@ admin.site.register(State)
 admin.site.register(Config, ConfigAdmin)
 admin.site.register(Idea, IdeaAdmin)
 admin.site.register(Vote, VoteAdmin)
+admin.site.register(DownVote, DownVoteAdmin)
 admin.site.register(Banner, BannerAdmin)

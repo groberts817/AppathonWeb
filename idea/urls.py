@@ -13,6 +13,7 @@ urlpatterns = patterns(
     url(r'^detail/(?P<idea_id>\d+)/remove_tag/(?P<tag_slug>[a-zA-Z0-9/\-_]+)/$',
         'remove_tag', name='remove_tag'),
     url(r'^vote/up/$', 'up_vote', name='upvote_idea'),
+	url(r'^vote/down/$', 'down_vote', name='downvote_idea'),
     url(r'^challenge/(?P<banner_id>\d+)/$',
         'banner_detail', name='banner_detail'),
 )
