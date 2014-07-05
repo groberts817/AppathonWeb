@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpRespons
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
 from django.db.models import Q
-from push_notifications.models import APNSDevice, GCMDevice
+#from push_notifications.models import APNSDevice, GCMDevice
 
 from idea.forms import IdeaForm, IdeaTagForm, UpVoteForm, DownVoteForm, ApproveForm, RejectForm
 from idea.models import Idea, State, Vote, DownVote, Banner, Config
@@ -73,11 +73,11 @@ def list(request, sort_or_state=None):
     ideas = Idea.objects.related_with_counts()
 
 
-    device = GCMDevice.objects.all()
-    device.send_message("Hello") # The message will be sent and received as json.
+#device = GCMDevice.objects.all()
+#   device.send_message("Hello") # The message will be sent and received as json.
     
-    device = APNSDevice.objects.all()
-    device.send_message("You've got mail") # The message may only be sent as text.
+    #   device = APNSDevice.objects.all()
+    # device.send_message("You've got mail") # The message may only be sent as text.
 
     #   Tag Filter
     for tag_id in tag_ids:

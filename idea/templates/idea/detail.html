@@ -140,6 +140,7 @@
                             <aside class="project-add-idea">
                                 <a href="{% url 'idea:add_idea' %}" class="btn-huge">Submit an idea</a>
                             </aside><!-- /project-add-idea -->
+                            {% if idea.state.name == 'Archive' %}
                             <aside class="voters">
                                 <h3>Liked by</h3>
                                 <ul>
@@ -151,7 +152,8 @@
                                     {% endif %}
                                 {% endfor %}
                                 </ul>                
-                            </aside>    
+                            </aside>
+                            {% endif %}
                             <aside class="tags">
                                 <h3>Idea Tags</h3>
                                 <ul>
