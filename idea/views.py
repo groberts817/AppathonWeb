@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q
 from push_notifications.models import APNSDevice, GCMDevice
 
-from idea.forms import IdeaForm, IdeaTagForm, UpVoteForm, DownVoteForm
+from idea.forms import IdeaForm, IdeaTagForm, UpVoteForm, DownVoteForm, ApproveForm, RejectForm
 from idea.models import Idea, State, Vote, DownVote, Banner, Config
 from idea.utility import state_helper
 from idea.models import UP_VOTE, DOWN_VOTE
@@ -74,7 +74,7 @@ def list(request, sort_or_state=None):
 
 
     device = GCMDevice.objects.all()
-    device.send_message({"foo": "bar"}) # The message will be sent and received as json.
+    device.send_message("Hello") # The message will be sent and received as json.
     
     device = APNSDevice.objects.all()
     device.send_message("You've got mail") # The message may only be sent as text.
@@ -88,24 +88,21 @@ def list(request, sort_or_state=None):
         if is_approver:
             sort_or_state = 'pending'
         else:
-            sort_or_state = 'trending'
+            sort_or_state = 'vote'
 
     #   URL Filter - either archive or one of the sorts
-    if sort_or_state == 'archived':
+    if sort_or_state == 'pending':
+        ideas = ideas.filter(state=State.objects.get(name='Pending')
+                         ).order_by('-time')
+    elif sort_or_state == 'likes':
         ideas = ideas.filter(state=State.objects.get(name='Archive')
                              ).order_by('-vote_count')
-    elif sort_or_state == 'pending':
-        ideas = ideas.filter(state=State.objects.get(name='Pending')
-                             ).order_by('-time')
+    elif sort_or_state == 'recent':
+        ideas = ideas.filter(state=State.objects.get(name='Archive')
+                         ).order_by('-time')
     else:
-        ideas = ideas.filter(state=State.objects.get(name='Active'))
-        if sort_or_state == 'vote':
-            ideas = ideas.order_by('-vote_count')
-        elif sort_or_state == 'recent':
-            ideas = ideas.order_by('-time')
-        else:
-            sort_or_state = 'trending'
-            ideas = ideas.order_by('-recent_activity')
+        sort_or_state = 'vote'
+        ideas = ideas.filter(state=State.objects.get(name='Active')).order_by('time')
 
     IDEAS_PER_PAGE = getattr(settings, 'IDEAS_PER_PAGE', 10)
     pager = Paginator(ideas, IDEAS_PER_PAGE)
@@ -210,6 +207,29 @@ def down_vote(request):
 
         return HttpResponseRedirect(next_url)
 
+@require_POST
+def approve_idea(request):
+    form = ApproveForm(request.POST)
+    if form.is_valid():
+        idea_id = form.cleaned_data['idea_id']
+        next_url = form.cleaned_data['next']
+    
+        idea = Idea.objects.get(pk=idea_id)
+        idea.state = State.objects.get(name='Active')
+        idea.save()
+        return HttpResponseRedirect(next_url)
+
+@require_POST
+def reject_idea(request):
+    form = RejectForm(request.POST)
+    if form.is_valid():
+        idea_id = form.cleaned_data['idea_id']
+        next_url = form.cleaned_data['next']
+        
+        idea = Idea.objects.get(pk=idea_id)
+        idea.state = State.objects.get(name='Rejected')
+        idea.save()
+        return HttpResponseRedirect(next_url)
 
 
 def more_like_text(text, klass):

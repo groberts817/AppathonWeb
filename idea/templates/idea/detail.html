@@ -13,39 +13,51 @@
             </div>
             <section id="main" class="main-content">
                 <div class="idea-votes span">
-                    <div class="count">{{voters|length}}</div>
-                    <div class="phrase">Like{{voters|pluralize:",s"}}</div>
-                    <div class="action">
-                        {% load comments %}
-                        {% if idea.state.name == 'Archive' %}
-                            <span class="btn btn-archive">Archived</span>
+                    {% load comments %}
+                    {% if idea.state.name == 'Archive' %}
+                        <div class="count">{{voters|length}}</div>
+                        <div class="phrase">Like{{voters|pluralize:",s"}}</div>
+                            <div class="count">{{downvoters|length}}</div>
+                            <div class="phrase">Unlike{{downvoters|pluralize:",s"}}</div>
+                            {% elif idea.state.name == 'Pending' %}
+                            <div class="action">
+                                <form action="{% url 'idea:approve_idea' %}" method=POST>
+                                    {% csrf_token %}
+                                    <input type="hidden" name="idea_id" value="{{idea.id}}"/>
+                                    <input type="hidden" name="next" value="{% url 'idea:idea_list' %}"/>
+                                    <input type="submit" class="btn btn-vote" value="Approve" id="approve"/>
+                                </form>
+                            </div>
+                            <div class="action">
+                                <form action="{% url 'idea:reject_idea' %}" method=POST>
+                                    {% csrf_token %}
+                                    <input type="hidden" name="idea_id" value="{{idea.id}}"/>
+                                    <input type="hidden" name="next" value="{% url 'idea:idea_list' %}"/>
+                                    <input type="submit" class="btn btn-vote" value="Reject" id="reject"/>
+                                </form>
+                            </div>
                         {% elif support %}
+                        <div class="action">
                             <span class="btn btn-voted">Voted</span>
+                        </div>
                         {% else %}
+                        <div class="action">
                             <form action="{% url 'idea:upvote_idea' %}" method=POST>
                                 {% csrf_token %}
                                 <input type="hidden" name="idea_id" value="{{idea.id}}"/>
                                 <input type="hidden" name="next" value="{% url 'idea:idea_detail' idea.id %}"/>
                                 <input type="submit" class="btn btn-vote" value="Like" id="vote_up"/>
                             </form>
-                        {% endif %}
-                    </div>
-					<div class="count">{{downvoters|length}}</div>
-					<div class="phrase">Unlike{{downvoters|pluralize:",s"}}</div>
-					<div class="action">
-						{% if idea.state.name == 'Archive' %}
-							<span class="btn-archive">Archived</span>
-						{% elif support %}
-							<span class="btn btn-voted">Voted</span>
-						{% else %}
+                            </div>
+                            <div class="action">
 							<form action="{% url 'idea:downvote_idea' %}" method=POST>
 								{% csrf_token %}
 								<input type="hidden" name="idea_id" value="{{idea.id}}"/>
 								<input type="hidden" name="next" value="{% url 'idea:idea_list' %}"/>
 								<input type="submit" class="btn btn-vote" value="UnLike" id="vote_down"/>
 							</form>
-						{% endif %}
-					</div>
+                            </div>
+                        {% endif %}
 					<!-- /bitton -->
                 </div><!-- /idea-votes -->
                 <article class="single-idea-entry span">

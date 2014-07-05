@@ -96,6 +96,13 @@ class DownVoteForm(forms.Form):
     idea_id = forms.IntegerField(widget=forms.HiddenInput())
     next = forms.CharField(max_length=512, widget=forms.HiddenInput())
 
+class ApproveForm(forms.Form):
+    idea_id = forms.IntegerField(widget=forms.HiddenInput())
+    next = forms.CharField(max_length=512, widget=forms.HiddenInput())
+
+class RejectForm(forms.Form):
+    idea_id = forms.IntegerField(widget=forms.HiddenInput())
+    next = forms.CharField(max_length=512, widget=forms.HiddenInput())
 
 class IdeaTagForm(forms.Form):
     tags = forms.CharField(max_length=512,

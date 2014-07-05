@@ -14,6 +14,8 @@ urlpatterns = patterns(
         'remove_tag', name='remove_tag'),
     url(r'^vote/up/$', 'up_vote', name='upvote_idea'),
 	url(r'^vote/down/$', 'down_vote', name='downvote_idea'),
+    url(r'^approve/$', 'approve_idea', name='approve_idea'),
+    url(r'^reject/$', 'reject_idea', name='reject_idea'),
     url(r'^challenge/(?P<banner_id>\d+)/$',
         'banner_detail', name='banner_detail'),
 )
