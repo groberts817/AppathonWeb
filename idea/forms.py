@@ -1,7 +1,5 @@
 from django import forms
 from idea.models import Idea
-from push_notifications.models import APNSDevice, GCMDevice
-from django.core.mail import send_mail, send_mass_mail
 from django.contrib.auth.models import User
 
 try:
@@ -25,8 +23,6 @@ class IdeaForm(forms.ModelForm):
         self.fields['summary'].label = "Pitch your idea"
         self.fields['tags'].label = "Tag it with keywords"
         self.fields['text'].label = "Give us the details"
-        
-        #send_mail('New Idea2', 'New idea posted! http://localhost:8000/idea/detail/', 'AgilexIdeaBox@gmail.com', User.objects.values_list('email',flat=True), fail_silently=False)
         
         self.fields['challenge-checkbox'] = forms.BooleanField(
             required=False,
@@ -54,11 +50,7 @@ class IdeaForm(forms.ModelForm):
         tags = self.cleaned_data.get('tags', [])
         self.cleaned_data['tags'] = []
         instance.save()
- 
- #        send_mail('New Idea2', 'New idea posted! http://ec2-54-88-16-5.compute-1.amazonaws.com/idea/detail/' + str(instance.id), 'AgilexIdeaBox@gmail.com', User.objects.values_list('email',flat=True), fail_silently=True)
-
-#       devices = GCMDevice.objects.all()
-#        devices.send_message({"message": "New idea posted!", "url":"http://ec2-54-88-16-5.compute-1.amazonaws.com/idea/detail/" + str(instance.id)})
+        
         try:
             for t in tags:
                 add_tags(instance, t, None, instance.creator, 'idea')

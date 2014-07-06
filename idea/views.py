@@ -5,6 +5,7 @@ from django.contrib.auth.models import SiteProfileNotAvailable, User
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail, send_mass_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.db.models import Count
@@ -12,12 +13,12 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpRespons
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
 from django.db.models import Q
-#from push_notifications.models import APNSDevice, GCMDevice
 
 from idea.forms import IdeaForm, IdeaTagForm, UpVoteForm, DownVoteForm, ApproveForm, RejectForm
 from idea.models import Idea, State, Vote, DownVote, Banner, Config
 from idea.utility import state_helper
 from idea.models import UP_VOTE, DOWN_VOTE
+from push_notifications.models import APNSDevice, GCMDevice
 
 try:
     from core.taggit.models import Tag, TaggedItem
@@ -71,13 +72,6 @@ def list(request, sort_or_state=None):
     page_num = request.GET.get('page_num')
 
     ideas = Idea.objects.related_with_counts()
-
-
-#device = GCMDevice.objects.all()
-#   device.send_message("Hello") # The message will be sent and received as json.
-    
-    #   device = APNSDevice.objects.all()
-    # device.send_message("You've got mail") # The message may only be sent as text.
 
     #   Tag Filter
     for tag_id in tag_ids:
@@ -217,6 +211,12 @@ def approve_idea(request):
         idea = Idea.objects.get(pk=idea_id)
         idea.state = State.objects.get(name='Active')
         idea.save()
+        send_mail('New Idea Posted', 'New idea posted! http://ec2-54-88-16-5.compute-1.amazonaws.com/idea/detail/' + str(idea.id), 'AgilexIdeaBox@gmail.com', User.objects.values_list('email',flat=True), fail_silently=True)
+        devices = GCMDevice.objects.all()
+        devices.send_message("New idea posted!", extra={"id": idea.id})
+        devices = APNSDevice.objects.all()
+        devices.send_message("New idea posted!", badge=0, extra={"id": idea.id})
+
         return HttpResponseRedirect(next_url)
 
 @require_POST
@@ -349,6 +349,12 @@ def add_idea(request, banner_id=None):
             if form.is_valid():
                 new_idea = form.save()
                 vote_up(new_idea, request.user)
+                send_mail('New Idea Pending', 'New idea pending! http://ec2-54-88-16-5.compute-1.amazonaws.com/idea/detail/' + str(new_idea.id), 'AgilexIdeaBox@gmail.com', User.objects.filter(groups__name='Approvers').values_list('email',flat=True), fail_silently=True)
+                devices = GCMDevice.objects.filter(user__groups__name='Approvers')
+                devices.send_message("New idea pending!", extra={"id": new_idea.id})
+                devices = APNSDevice.objects.filter(user__groups__name='Approvers')
+                devices.send_message("New idea pending!", badge=0, extra={"id": new_idea.id})
+
                 return _render(request, 'idea/add_success.html',
                                {'idea': new_idea, })
             else:
