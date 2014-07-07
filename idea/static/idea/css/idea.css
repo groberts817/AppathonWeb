@@ -2,9 +2,11 @@
    Main
    ========================================================================== */
 /* Base */
-.ic * {
-    font-family: "Avenir Next", Arial, sans-serif;
+body {
+    background: #eee;
 }
+.ic * {
+    font-family: "Helvetica Neue", "Segoe UI";}
 [class^="icon-"] {
     font-family: FontAwesome;
 }
@@ -100,7 +102,7 @@ textarea.populated {
 .project-header .info {
     margin-top: 20px;
     margin-bottom: 10px;
-    font: 100%/1.375 Georgia, "Times New Roman", serif; /* 16px font size */
+    /*font: 100%/1.375 Georgia, "Times New Roman", serif; /* 16px font size */
 }
 .project-title {
     margin-top: 0;
@@ -122,14 +124,12 @@ textarea.populated {
 .project-description {
     color: #000;
     font-size: 187.5%; /* 30px */
-    font-weight: 600;
     line-height: 0.88;
     margin-bottom: 0.5em;
 }
 .project-prompt {
     color: #999;
     font-size: 100%; /* 16px */
-    font-weight: bold;
     margin-top: 0.5em;
     text-align: left;
     text-transform: uppercase;
@@ -141,15 +141,15 @@ textarea.populated {
 }
 /* Navigation */
 h2.section a {
-    font-family: "Avenir Next Demi", Arial, sans-serif;
+    /*font-family: "Avenir Next Demi", Arial, sans-serif;*/
     text-transform: none;
-    font-weight: normal;
+    font-weight: lighter;
 }
 ul.section-nav {
-    border-bottom: 1px solid #000;
     padding-left: 0;
     margin-top: 0;
     margin-bottom: 0;
+    margin-left: 10px;
     list-style: none;
     overflow: auto;
     overflow-y:hidden;
@@ -157,20 +157,25 @@ ul.section-nav {
 }
 ul.section-nav li {
     display: inline-block;
-    margin-right: 0.5em;
-    border-bottom-width: 0;
 }
 ul.section-nav li a {
     display: inline-block;
     padding: 0.625em 1em 0.5em;
-    background: #e4e2e0;
+    background: #ccc;
     color: #000;
-    font-family: "Avenir Next Demi", Arial, sans-serif;
+    /*font-family: "Avenir Next Demi", Arial, sans-serif;*/
     font-size: 0.875em;
     text-transform: uppercase;
     letter-spacing: 1px;
     text-decoration: none;
-    border-bottom-width: 0;
+}
+ul.section-nav li:first-child a {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+ul.section-nav li:last-child a {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 ul.section-nav li a:hover,
@@ -178,14 +183,16 @@ ul.section-nav li a:focus {
     background: #bcb6b2;
 }
 ul.section-nav li.active a {
-    background: #2cb34a;
+    background: #41bb5c;
     color: #FFF;
 }
 
 /* Content */
 .idea-entry {
-    border-top: 1px solid #000;
-    padding: 20px 20px 20px 0;
+    background: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
 }
 .idea-entry:first-child {
     border-top: 0;
@@ -209,28 +216,28 @@ ul.section-nav li.active a {
 .idea-votes .phrase {
     font-size: .875em;
     display: block;
-    font-family: "Avenir Next Demi", Arial, sans-serif;
+    /*font-family: "Avenir Next Demi", Arial, sans-serif;*/
     padding-top: 1em;
     text-transform: uppercase;
 }
 .idea-votes .action {
-    margin-top: .75em;
+    margin-bottom: .75em;
 }
 .idea-title {
     padding-right: 1.875em;
+    font-weight: lighter;
 }
 .idea-description {
-    font-family: Georgia, "Times New Roman", serif;
-    margin: 1em 0;
+    margin: .25em 0;
 }
 .idea-more {
     display: inline-block;
 }
 .idea-more a {
-    font-family: FontAwesome, "Avenir Next", Arial, sans-serif;
+    /*font-family: FontAwesome, "Avenir Next", Arial, sans-serif;*/
 }
 .idea-footer {
-    font-size: 16px;
+    font-size: 14px;
 }
 .idea-info .suggested {
     color: #63666a;
@@ -247,7 +254,7 @@ ul.section-nav li.active a {
 }
 .comments h4 {
     font-size: 100%;
-    font-family: "Avenir Next Demi", Arial, sans-serif;
+    /*font-family: "Avenir Next Demi", Arial, sans-serif;*/
     line-height: 1.66;
     min-height: 1.75em;
     text-transform: uppercase;
@@ -284,7 +291,7 @@ ul.section-nav li.active a {
     margin-top: 1.5em;
 }
 .single-idea-entry .idea-entry-content h4 {
-    font-family: "Avenir Next Medium", Arial, sans-serif;
+    /*font-family: "Avenir Next Medium", Arial, sans-serif;*/
 }
 .single-idea-entry .idea-entry-content .detail {
     margin-top: 1.5em;
@@ -297,7 +304,6 @@ ul.section-nav li.active a {
 }
 .comment-date {
     color: #666;
-    font-weight: normal;
 }
 .comment {
     padding: 1em 0 1em;
@@ -469,7 +475,6 @@ ul.section-nav li.active a {
     margin: 0 0 0 0;
 }
 .idea-hero a {
-    border-bottom-width: 0;
 }
 .main-content a {
     border-bottom-width: 1px;
@@ -558,9 +563,7 @@ span.btn-voted:hover {
      display: block;
      margin-bottom: 0.25em;
 }
-.result-number {
-    font-weight: bold;
-}
+.result-number {}
  /* Image replacement */
 .ir {
     background-color: transparent;
@@ -644,9 +647,13 @@ span.btn-voted:hover {
     font-size: 16px;
     letter-spacing: 1px;
 }
-
+h2 {
+    font-weight: lighter;
+    margin: 0;
+    padding: 0;
+}
 .challenge-info h2 {
-    font-weight: normal;
+    font-weight: lighter;
 }
 .challenge-info .challenge-banner {
     margin-top: 0.5em;
@@ -654,7 +661,7 @@ span.btn-voted:hover {
     padding: 1em;
 }
 .challenge-info {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #666;
     padding: 0;
     padding-bottom: 20px;
 }
@@ -673,6 +680,27 @@ section.main-content hr {
     padding: 0.71428571428571em 0;
     width: 4em;
     font-size: 16px;
+}
+
+.btn {
+    border: 0;
+    border-radius: 5px;
+}
+
+#vote_up, #vote_down {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 200;
+    font-size: 12pt;
+}
+
+#vote_up{
+    background: #41bb5c;
+    color: #fff;
+}
+
+#vote_down {
+    background: #e4e2e0;
 }
 
 /* Selectize */
@@ -744,7 +772,6 @@ section.main-content hr {
     color: #75787b;
     line-height: 20px;
     text-decoration: none;
-    border-bottom-width: 0;
 }
 
 .pagination ul > li > a:hover,
@@ -759,7 +786,6 @@ section.main-content hr {
 .pagination ul > .active > a,
 .pagination ul > .active > span {
     font-family: "Avenir Next Demi", Arial, sans-serif;
-    font-weight: bold;
     cursor: default;
 }
 
