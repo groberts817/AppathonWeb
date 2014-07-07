@@ -5,6 +5,9 @@
 body {
     background: #eee;
 }
+a:hover {
+    text-decoration: none;
+}
 .ic * {
     font-family: "Helvetica Neue", "Segoe UI";}
 [class^="icon-"] {
@@ -109,17 +112,27 @@ textarea.populated {
 }
 .project-title a {
     color: #0072CE;
-    font-family: FontAwesome, "Avenir Next Medium", Arial, sans-serif;
+    font-family: FontAwesome, "Helvetica Neue", "Segoe UI";
     line-height: 1.57142857142857em;
 }
 .project-title a:before {
     content: "\f053\00a0 Back To ";
-    font-family: FontAwesome, "Avenir Next Medium", Arial, sans-serif;
+    font-family: FontAwesome, "Helvetica Neue", "Segoe UI";
     margin-right: 0;
 }
 
 .project-add-idea {
+    padding: 10px;
+    background: #41bb5c;
+    color: #fff;
+    border-radius: 5px;
     margin-bottom: 2.5em;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.project-add-idea a {
+    color: #fff;
 }
 .project-description {
     color: #000;
@@ -141,7 +154,6 @@ textarea.populated {
 }
 /* Navigation */
 h2.section a {
-    /*font-family: "Avenir Next Demi", Arial, sans-serif;*/
     text-transform: none;
     font-weight: lighter;
 }
@@ -163,7 +175,6 @@ ul.section-nav li a {
     padding: 0.625em 1em 0.5em;
     background: #ccc;
     color: #000;
-    /*font-family: "Avenir Next Demi", Arial, sans-serif;*/
     font-size: 0.875em;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -216,12 +227,14 @@ ul.section-nav li.active a {
 .idea-votes .phrase {
     font-size: .875em;
     display: block;
-    /*font-family: "Avenir Next Demi", Arial, sans-serif;*/
     padding-top: 1em;
     text-transform: uppercase;
 }
 .idea-votes .action {
-    margin-bottom: .75em;
+    margin-bottom: .5em;
+}
+.idea-title-wrap {
+    padding-left: 5px;
 }
 .idea-title {
     padding-right: 1.875em;
@@ -234,7 +247,6 @@ ul.section-nav li.active a {
     display: inline-block;
 }
 .idea-more a {
-    /*font-family: FontAwesome, "Avenir Next", Arial, sans-serif;*/
 }
 .idea-footer {
     font-size: 14px;
@@ -254,7 +266,6 @@ ul.section-nav li.active a {
 }
 .comments h4 {
     font-size: 100%;
-    /*font-family: "Avenir Next Demi", Arial, sans-serif;*/
     line-height: 1.66;
     min-height: 1.75em;
     text-transform: uppercase;
@@ -270,6 +281,9 @@ ul.section-nav li.active a {
     height: 6.25em;
     margin-bottom: 0.5em;
     width: 99%;
+    border: 1px solid #777;
+    border-radius: 5px;
+    font-size: 11pt;
 }
 .comment-form form {
     position: relative;
@@ -286,18 +300,29 @@ ul.section-nav li.active a {
 }
 .single-idea-entry {
     width: 90%; /* slightly smaller than span11 due to wide idea-votes */
+    margin-left: 2%;
 }
 .single-idea-entry .body {
-    margin-top: 1.5em;
+    margin-top: .5em;
+}
+.idea-entry-content {
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-style: italic;
 }
 .single-idea-entry .idea-entry-content h4 {
-    /*font-family: "Avenir Next Medium", Arial, sans-serif;*/
+    font-style: normal;
+    color: #2e8340;
 }
 .single-idea-entry .idea-entry-content .detail {
-    margin-top: 1.5em;
+    margin-top: .5em;
+    font-style: normal;
 }
 .single-idea-entry .idea-entry-content p {
     margin-top: .5em;
+    font-size: .875em;
+    font-style: normal;
 }
 .single-idea-entry .idea-entry-content .edit-separator {
     padding: 0em .5em;
@@ -349,7 +374,7 @@ ul.section-nav li.active a {
 
 #challenge-link a:after {
     content: "\f054";
-    font-family: FontAwesome, "Avenir Next", Arial, sans-serif;
+    font-family: FontAwesome, "Helvetica Neue", "Segoe UI";
     margin-left: .25em;
 }
 .voters {
@@ -357,10 +382,10 @@ ul.section-nav li.active a {
 }
 .tags .tag {
     display: block;
-    margin: 0 0.5em 0.75em 1em;
+    margin: 0 0.25em 0.25em 0;
+    font-size: 10pt;
 }
 .tags .tag a {
-    font-family: "Avenir Next Demi", Arial, sans-serif;
 }
 .sidebar .tags form input[type="text"] {
     width: 11em;
@@ -483,7 +508,7 @@ ul.section-nav li.active a {
 /* Single View */
 .challenge-info p.challenge-entry-content,
 .single-idea-entry .idea-entry-content p {
-    font: 100%/1.375 Georgia, "Times New Roman", serif; /* 16px font size */
+    /*font: 100%/1.375 Georgia, "Times New Roman", serif; /* 16px font size */
 }
 
 .challenge-info  p.challenge-entry-content {
@@ -498,7 +523,7 @@ ul.section-nav li.active a {
     padding-top: 1.5em;
 }
 .idea-single .comments {
-    border-top: 3px solid #f2f2f2;
+    border-top: 2px solid #eee;
     margin-top: 2.5em;
     padding-top: 1.5625em;
 }
@@ -598,7 +623,6 @@ span.btn-voted:hover {
     padding: 1em 0;
 }
 .summary-section-header {
-    font-family: "Avenir Next Medium", Arial, sans-serif;
 }
 .summary-section-body {
     margin-top: 0.5em;
@@ -643,14 +667,19 @@ span.btn-voted:hover {
 
 .challenge-info h3 {
     text-transform: uppercase;
-    font-family: "Avenir Next Demi", Arial, sans-serif;
     font-size: 16px;
     letter-spacing: 1px;
 }
-h2 {
-    font-weight: lighter;
+h1, h2, h3, h4 {
+    font-weight: 100;
     margin: 0;
     padding: 0;
+}
+h3 {
+    font-size: 18pt;
+}
+h4 {
+    font-weight: 200;
 }
 .challenge-info h2 {
     font-weight: lighter;
@@ -678,20 +707,24 @@ section.main-content hr {
 
 .idea-votes .btn-vote, .idea-votes .btn-voted, .idea-votes .btn-voted:hover {
     padding: 0.71428571428571em 0;
-    width: 4em;
+    width: 5em;
     font-size: 16px;
 }
 
 .btn {
     border: 0;
     border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 200;
+    font-size: 12pt;
+    padding: 5px 8px;
+
 }
 
 #vote_up, #vote_down {
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-weight: 200;
-    font-size: 12pt;
 }
 
 #vote_up{
@@ -701,6 +734,11 @@ section.main-content hr {
 
 #vote_down {
     background: #e4e2e0;
+}
+
+.back-to-top {
+    font-size: 10pt;
+    padding-left: 10px;
 }
 
 /* Selectize */
@@ -752,7 +790,7 @@ section.main-content hr {
 
 .pagination ul {
     display: block;
-    padding-left: 0;
+    padding-left: 10px;
     margin: 0;
     overflow: auto;
 }
@@ -769,9 +807,12 @@ section.main-content hr {
 .pagination ul > li > span {
     padding: 4px 8px;
     float: left;
-    color: #75787b;
     line-height: 20px;
     text-decoration: none;
+    color: #777;
+    border: 1px solid #777;
+    border-radius: 5px;
+    background: #fff;
 }
 
 .pagination ul > li > a:hover,
@@ -785,8 +826,8 @@ section.main-content hr {
 
 .pagination ul > .active > a,
 .pagination ul > .active > span {
-    font-family: "Avenir Next Demi", Arial, sans-serif;
     cursor: default;
 }
 
 .pagination ul > .disabled > span,
+
