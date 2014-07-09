@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block "css_files" %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}idea/css/idea.css">
-
+{% if mobile %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}idea/css/idea_mobile.css">
+        {% else %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}idea/css/idea.css">
+            {% endif %}
     {% if page.description %}
         <meta name="description" content="{{ page.description|striptags }}"> 
     {% endif %}

@@ -138,6 +138,11 @@ def list(request, sort_or_state=None):
     except Config.DoesNotExist:
         about_text = ""
 
+    if 'Mobile' in request.META['HTTP_USER_AGENT']:
+        mobile = True
+    else:
+        mobile = False
+
     return _render(request, 'idea/list.html', {
                    'sort_or_state': sort_or_state,
                    'ideas': page,
@@ -145,6 +150,7 @@ def list(request, sort_or_state=None):
                    'banner': banner,
                    'about_text': about_text,
                    'is_approver': is_approver,
+                   'mobile':mobile,
                    })
 
 
@@ -215,7 +221,7 @@ def approve_idea(request):
         devices = GCMDevice.objects.all()
         devices.send_message("New idea posted!", extra={"id": idea.id})
         devices = APNSDevice.objects.all()
-        devices.send_message("New idea posted!", badge=0, extra={"id": idea.id})
+        devices.send_message(None, sound="", content_available=True, extra={"id": idea.id, "msg": "New idea posted!"})
 
         return HttpResponseRedirect(next_url)
 
@@ -322,6 +328,11 @@ def detail(request, idea_id):
                                                          object_id=idea_id):
                 tags_created_by_user.append(tag.name)
 
+    if 'Mobile' in request.META['HTTP_USER_AGENT']:
+        mobile = True
+    else:
+        mobile = False
+
     return _render(request, 'idea/detail.html', {
         'idea': idea,  # title, body, user name, user photo, time
         'support': request.user in voters or request.user in downvoters,
@@ -329,7 +340,8 @@ def detail(request, idea_id):
         'tags_created_by_user': tags_created_by_user,
         'voters': voters,
         'downvoters': downvoters,
-        'tag_form': tag_form
+        'tag_form': tag_form,
+        'mobile':mobile,
     })
 
 
@@ -353,10 +365,13 @@ def add_idea(request, banner_id=None):
                 devices = GCMDevice.objects.filter(user__groups__name='Approvers')
                 devices.send_message("New idea pending!", extra={"id": new_idea.id})
                 devices = APNSDevice.objects.filter(user__groups__name='Approvers')
-                devices.send_message("New idea pending!", badge=0, extra={"id": new_idea.id})
-
+                devices.send_message(None, sound="", content_available=True, extra={"id": new_idea.id, "msg": "New idea pending!"})
+                if 'Mobile' in request.META['HTTP_USER_AGENT']:
+                    mobile = True
+                else:
+                    mobile = False
                 return _render(request, 'idea/add_success.html',
-                               {'idea': new_idea, })
+                               {'idea': new_idea, 'mobile':mobile, })
             else:
                 if 'banner' in request.POST:
                     form.fields["banner"].queryset = get_current_banners()
