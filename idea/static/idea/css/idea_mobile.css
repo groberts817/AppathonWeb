@@ -1,0 +1,868 @@
+/* ==========================================================================
+   Main
+   ========================================================================== */
+/* Base */
+body {
+    background: #eee;
+    max-width: 100%;
+    padding: 10px;
+}
+a:hover {
+    text-decoration: none;
+}
+.ic * {
+    font-family: "Helvetica Neue", "Segoe UI";}
+[class^="icon-"] {
+    font-family: FontAwesome;
+}
+
+@media screen {
+    [class*="span"] {
+        border: 0px solid rgba(0,0,0,0);
+        padding: 0;
+        display: inline-block;
+        vertical-align: top;
+    }
+    [class*="span"]:first-child {
+        margin-left: 0;
+    }
+    .section-nav {
+        margin-left: 0;
+    }
+}
+.span1 { width: 5.714285714286%; }
+.span2 { width: 14.28571%; }
+.span3 { margin: 0; width: 100%; }
+.span4, .span_side { width: 31.42857%; }
+.span5 { width: 100%; }
+.span6 { width: 48.57142%; }
+.span7 { width: 100%; }
+.span8, .span_main { width: 65.71428%; }
+.span9 { margin: 0; width: 100%; }
+.span10 { display: block; margin-left: 5px; }
+.span11 { width: 91.42857%; }
+.span12 { margin: 0; width: 100%; }
+
+.idea-home {
+    overflow: auto;
+    overflow-y:hidden;
+    overflow-x:hidden;
+    width: auto;
+    max-width: 100%;
+}
+
+input[type="text"],
+textarea[type="text"] {
+    padding: 0.25em;
+    border: 1px solid #75787B; /* Gray */
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0;
+    margin: 0;
+    vertical-align: top;
+}
+
+.selectize-input.input-active,
+input:focus,
+input.focus,
+textarea:focus,
+textarea.focus {
+    border: 1px solid #0072CE; /* Pacific */
+    border-radius: 0;
+    outline: 1px solid #0072CE; /* Pacific */
+    outline-offset: 0;
+    -webkit-box-shadow: none;
+            box-shadow: none;
+}
+
+.selectize-control.input-error .selectize-input,
+input.input-error,
+textarea.input-error {
+    border: 1px solid #D12124; /* Red Orange */
+    outline: 1px solid #D12124; /* Red Orange */
+}
+
+input.populated,
+textarea.populated {
+    color: #888;
+}
+
+/* Improve readability when focused and hovered in all browsers: h5bp.com/h */
+.ic a:hover,
+.ic a:active {
+    outline: 0;
+}
+
+/* Header */
+.project-header .row {
+    padding: 0 0 .5em 0;
+}
+.project-header .row p {
+    margin: 0;
+}
+.logo a,
+.logo a:hover {
+    text-decoration: none;
+}
+
+.project-header .info {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    /*font: 100%/1.375 Georgia, "Times New Roman", serif; /* 16px font size */
+}
+.project-title {
+    margin-top: 0;
+}
+.project-title a {
+    color: #0072CE;
+    font-family: FontAwesome, "Helvetica Neue", "Segoe UI";
+    line-height: 1.57142857142857em;
+}
+.project-title a:before {
+    content: "\f053\00a0 Back To ";
+    font-family: FontAwesome, "Helvetica Neue", "Segoe UI";
+    margin-right: 0;
+}
+
+.project-add-idea {
+    padding: 10px;
+    background: #41bb5c;
+    color: #fff;
+    border-radius: 5px;
+    margin-bottom: 2.5em;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: auto;
+}
+.project-add-idea a {
+    color: #fff;
+}
+.project-description {
+    color: #000;
+    font-size: 187.5%; /* 30px */
+    line-height: 0.88;
+    margin-bottom: 0.5em;
+}
+.project-prompt {
+    color: #999;
+    font-size: 100%; /* 16px */
+    margin-top: 0.5em;
+    text-align: left;
+    text-transform: uppercase;
+}
+.search-form input[type="text"],
+.search-form textarea {
+    height: 2em;
+    width: 80%;
+}
+/* Navigation */
+h2.section a {
+    text-transform: none;
+    font-weight: lighter;
+}
+ul.section-nav {
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    list-style: none;
+    overflow: auto;
+    overflow-y:hidden;
+    overflow-x:hidden;
+}
+ul.section-nav li {
+    display: inline-block;
+}
+ul.section-nav li a {
+    display: inline-block;
+    padding: 0.625em 1em 0.5em;
+    background: #ccc;
+    color: #000;
+    font-size: 0.875em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+ul.section-nav li:first-child a {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+ul.section-nav li:last-child a {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+ul.section-nav li a:hover,
+ul.section-nav li a:focus {
+    background: #bcb6b2;
+}
+ul.section-nav li.active a {
+    background: #41bb5c;
+    color: #FFF;
+}
+
+/* Content */
+.idea-entry {
+    background: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+.idea-entry:first-child {
+    border-top: 0;
+}
+.no-results {
+    padding: 2.5em 0;
+}
+.idea-single .idea-votes {
+    text-align: center;
+}
+.idea-entry .idea-votes {
+    text-align: center;
+    width: 5em;
+}
+.idea-entry .idea-votes div {
+    display: block;
+    padding-right: 0;
+}
+.main-content .idea-votes {
+    display: block;
+    text-align: center;
+}
+.idea-votes .count {
+    display: inline-block;
+    font-size: 2.125em;
+    line-height: 0.3;
+    padding-top: 0.475em;
+    vertical-align: none;
+}
+.idea-votes .phrase {
+    display: inline-block;
+    font-size: .875em;
+    padding-top: 1em;
+    text-transform: uppercase;
+    padding-right: 15px;
+}
+.idea-votes .phrase:last-child {
+    padding-right: 0;
+}
+.idea-votes .action {
+    margin-bottom: .5em;
+    display: inline-block;
+}
+.idea-votes .btn-vote, .idea-votes .btn-voted {
+    width: 5em;
+}
+.idea-single .action {
+    width: 49%;
+}
+.idea-single .action .btn-vote {
+    width: 100%;
+}
+.idea-votes .action:last-child {
+    margin-bottom: 0;
+}
+.idea-title-wrap {
+    padding-left: 5px;
+}
+.idea-title {
+    font-weight: lighter;
+}
+.idea-description {
+}
+.idea-more {
+    display: inline-block;
+}
+.idea-more a {
+}
+.idea-footer {
+    font-size: 14px;
+}
+.idea-info .suggested {
+    color: #63666a;
+    margin-left: .5em;
+}
+.idea-info .commented {
+    color: #63666a;
+    margin-right: .5em;
+}
+
+/* Comments */
+.comments {
+    position: relative;
+}
+.comments h4 {
+    font-size: 100%;
+    line-height: 1.66;
+    min-height: 1.75em;
+    text-transform: uppercase;
+}
+.comment-meta {
+    font-size: 16px;
+}
+.comment-form {
+    padding: 0 0 2.8em;
+    margin: 1.5625em 0 0;
+}
+.comment-form textarea {
+    height: 6.25em;
+    margin-bottom: 0.5em;
+    width: 99%;
+    border: 1px solid #777;
+    border-radius: 5px;
+    font-size: 11pt;
+}
+.comment-form form {
+    position: relative;
+}
+.comment-form label {
+    color: #666;
+    position: absolute;
+    left: .25em;
+}
+.comment-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.single-idea-entry {
+    width: 100%;
+    margin: 0;
+}
+.single-idea-entry .body {
+    margin-top: .5em;
+}
+.idea-entry-content {
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-style: italic;
+}
+.single-idea-entry .idea-entry-content h4 {
+    font-style: normal;
+    color: #2e8340;
+}
+.single-idea-entry .idea-entry-content .detail {
+    margin-top: .5em;
+    font-style: normal;
+}
+.single-idea-entry .idea-entry-content p {
+    margin-top: .5em;
+    font-size: .875em;
+    font-style: normal;
+}
+.single-idea-entry .idea-entry-content .edit-separator {
+    padding: 0em .5em;
+}
+.comment-date {
+    color: #666;
+}
+.comment {
+    padding: 1em 0 1em;
+    border-bottom: 1px solid #ccc;
+}
+
+.comment .comment {
+    padding: .5em 0 .5em;
+    margin-left: 2.5em;
+    border-top: 1px solid #ccc;
+    border-bottom: 0;
+}
+
+/* Sidebar */
+.sidebar {
+    margin-top: 1em;
+    clear:both;
+    text-align: center;
+}
+.sidebar ul {
+    list-style: none;
+    padding-left: 0;
+}
+.ic-add-tags,
+.sidebar-nav {
+    margin-bottom: 2.5em;
+}
+.sidebar .challenge-banner {
+    margin-bottom: 2.5em;
+    background-color: #DBEDD4;
+    padding: 1.25em;
+}
+#challenge-link a {
+    border-bottom-width: 1px;
+}
+
+#challenge-link {
+    margin-bottom: 20px;
+}
+.sidebar .challenge-banner #challenge-link {
+    margin-top: 1.5em;
+    margin-bottom: 0;
+}
+
+
+#challenge-link a:after {
+    content: "\f054";
+    font-family: FontAwesome, "Helvetica Neue", "Segoe UI";
+    margin-left: .25em;
+}
+.voters {
+    margin: 20px 0;
+}
+.tags {
+    display: none;
+}
+.tags .tag {
+    display: block;
+    margin: 0 0.25em 0.25em 0;
+    font-size: 10pt;
+}
+.tags .tag a {
+}
+.sidebar .tags form input[type="text"] {
+    width: 11em;
+}
+.ic-add-tags .help-text {
+    font-size: 87.5%;
+} .sidebar-nav a {
+    font-size: 87.5%; /* 14px */
+}
+
+/* Add View */
+.project-add {
+    margin: 1.5em 0 0;
+}
+.project-add form > div {
+    margin: 1em 0;
+    position: relative;
+}
+.project-add form textarea {
+    height: 5.25em;
+    max-width: 48.57142%;
+    padding-bottom: 1.25em;
+}
+.project-add form textarea#id_text {
+    height: 8.25em;
+}
+.project-add label {
+    display: block;
+    position: relative;
+}
+.project-add input#id_title,
+.project-add select#id_banner,
+.project-add textarea#id_text,
+.project-add textarea#id_summary,
+.project-add input#id_tags,
+.selectize-control {
+    width: 48.57142%;
+    display: block;
+    margin: 0;
+}
+.project-add .textAreaCountMessage {
+    width: 48.57142%;
+    position: relative;
+}
+.project-add span[id$="textcount"] {
+    font-style: italic;
+    background-color: #FFF;
+    line-height: 1em;
+    font-size: 0.875em;
+    position: absolute;
+    bottom: 2px;
+    right: 0;
+    text-align: right;
+}
+.project-add .banner {
+    margin-top: 0;
+}
+.project-add .challenge-checkbox {
+    margin-bottom: 0;
+}
+.project-add .challenge-checkbox label {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: .5em;
+}
+.project-add .challenge-checkbox input {
+    display: inline-block;
+    vertical-align: middle;
+}
+.project-add select#id_banner {
+    visibility: hidden;
+    margin-left: 1.5em;
+}
+.project-add select#id_banner.active {
+    visibility: visible;
+}
+.form-field-footer {
+    position: relative;
+}
+.project-add .help_text {
+    margin: 0;
+    font-style: italic;
+    width: 48.57142%;
+    font-size: 0.875em;
+    visibility: hidden;
+    display: block;
+}
+.errorlist {
+    list-style: none;
+    padding: 0;
+}
+.errorlist li {
+    position: absolute;
+    top: 0;
+    left: 2px;
+    margin: 0;
+    padding: 0;
+}
+.project-add span#submit-buttons {
+    display: block;
+    margin-top: 1.375em;
+}
+.project-add span#submit-buttons input {
+    vertical-align: middle;
+}
+.project-add #add-idea-btn,
+.project-add .secondary-action {
+    margin-top: 1.625em;
+    margin-bottom: 2em;
+}
+.idea-hero {
+    margin: 0;
+}
+.idea-hero a {
+}
+.main-content a {
+    border-bottom-width: 1px;
+}
+
+/* Single View */
+.challenge-info p.challenge-entry-content,
+.single-idea-entry .idea-entry-content p {
+    /*font: 100%/1.375 Georgia, "Times New Roman", serif; /* 16px font size */
+}
+
+.challenge-info  p.challenge-entry-content {
+    margin: .5em 0;
+}
+.idea-add,
+.idea-single,
+.idea-banner-single {
+    padding-top: .5em;
+}
+.idea-single .main-content {
+    padding-top: .5em;
+}
+.idea-single .comments {
+    border-top: 2px solid #eee;
+    margin-top: 2.5em;
+    padding-top: 1.5625em;
+}
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/* Style help */
+.border-bottom {
+    border-bottom: 3px solid #000;
+}
+#work_tag_submit_btn {
+    margin-top: .5em;
+}
+span.btn-voted,
+span.btn-voted:hover {
+    color: #75787B;
+    cursor: default;
+}
+.idea-add .alert {
+    color: #d14124;
+    display: block;
+    margin-top: 1.6em;
+    text-align: center;
+    text-transform: uppercase;
+}
+.idea-add a .alert {
+    color: #d14124;
+    text-decoration: none;
+}
+.idea-add a:hover .alert,
+.idea-add a:focus .alert {
+    border-color: #d14124 !important;
+}
+.idea-add .alert .down {
+    background: url(../img/alert-arrow.png) 0 50% no-repeat;
+    height: 22px;
+    padding: 0.6875em;
+    width: 22px;
+}
+.idea-add .alert-none {
+    background-color: #f2f2f2;
+    border: 3px solid #999;
+    box-sizing: border-box;
+    color: #999;
+    display: block;
+    margin: 1.25em 0;
+    padding: 0.5em 1em ;
+    text-align: center;
+    text-transform: uppercase;
+}
+.idea-add .alert-none .down {
+    background: url(../img/alert-check.png) 0 50% no-repeat;
+    height: 22px;
+    padding: 0.6875em;
+    width: 22px;
+}
+.idea-add .alert .alert-content,
+.idea-add .alert-none p {
+     display: block;
+     margin-bottom: 0.25em;
+}
+.result-number {}
+ /* Image replacement */
+.ir {
+    background-color: transparent;
+    border: 0;
+    overflow: hidden;
+    /* IE 6/7 fallback */
+    *text-indent: -9999px;
+}
+.ir:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 150%;
+}
+
+.add-summary {
+    margin-top: 2em;
+    width: 65.71428%;
+}
+.add-summary #submit-buttons {
+    margin: 2em 0;
+    text-align: center;
+}
+.add-summary #submit-buttons a {
+    margin-right: 8em;
+}
+
+.summary-text {
+    margin: 1em 0;
+}
+.summary-section {
+    padding: 1em 0;
+}
+.summary-section-header {
+}
+.summary-section-body {
+    margin-top: 0.5em;
+}
+
+/* Hide from both screenreaders and browsers: h5bp.com/u */
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+/* Hide only visually, but have it available for screenreaders: h5bp.com/v */
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
+/* Hide visually and from screenreaders, but maintain layout */
+.invisible {
+    visibility: hidden;
+}
+
+.challenge-info h3 {
+    text-transform: uppercase;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+h1, h2, h3, h4 {
+    font-weight: 100;
+    margin: 0;
+    padding: 0;
+}
+h3 {
+    font-size: 18pt;
+}
+h4 {
+    font-weight: 200;
+}
+.challenge-info h2 {
+    font-weight: lighter;
+}
+.challenge-info .challenge-banner {
+    margin-top: 0.5em;
+    background-color: #DBEDD4;
+    padding: 1em;
+}
+.challenge-info {
+    border-bottom: 1px solid #666;
+    padding: 0;
+    padding-bottom: 20px;
+}
+.challenge-info #start {
+    margin-right: 2.5em;
+}
+
+section.main-content hr {
+    background-color: #000;
+    height: 3px;
+    border: 0;
+    padding: 0;
+}
+
+.idea-votes .btn-vote, .idea-votes .btn-voted, .idea-votes .btn-voted:hover {
+    padding: 0.71428571428571em 0;
+    font-size: 16px;
+}
+
+.btn {
+    border: 0;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 200;
+    font-size: 12pt;
+    padding: 5px 8px;
+
+}
+
+#vote_up, #vote_down {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#vote_up{
+    background: #41bb5c;
+    color: #fff;
+}
+
+#vote_down {
+    background: #e4e2e0;
+}
+
+.back-to-top {
+    float: right;
+    margin-right: 5px;
+    font-size: 10pt;
+}
+
+/* Selectize */
+.selectize-input {
+    border: 1px solid #919395;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
+    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+    -webkit-transition: border linear .2s,box-shadow linear .2s;
+    -moz-transition: border linear .2s,box-shadow linear .2s;
+    -ms-transition: border linear .2s,box-shadow linear .2s;
+    -o-transition: border linear .2s,box-shadow linear .2s;
+    transition: border linear .2s,box-shadow linear .2s;
+    border-radius: 0;
+    display: block;
+}
+.multi.selectize-control .selectize-input [data-value] {
+    background: #FFCE8D;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    text-shadow: none;
+    color: #000;
+    filter: none;
+    font-size: 14px;
+}
+.selectize-input input[type="text"],
+.selectize-control textarea {
+    vertical-align: middle;
+    font-size: 14px;
+}
+.selectize-control div.option span,
+.selectize-control div.create span {
+    margin-left: 0;
+    display: inline;
+}
+
+// Pagination
+
+.pagination {
+    border: solid #75787b;
+    border-width: 1px 0;
+    margin: 20px 0;
+}
+
+.pagination ul {
+    display: block;
+    margin: 0;
+    overflow: auto;
+}
+
+.pagination [class^="icon-"] {
+    font-size: 0.625em;
+}
+
+.pagination ul > li {
+    display: inline;
+}
+
+.pagination ul > li > a,
+.pagination ul > li > span {
+    padding: 4px 8px;
+    float: left;
+    line-height: 20px;
+    text-decoration: none;
+    color: #777;
+    border: 1px solid #777;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.pagination ul > li > a:hover,
+.pagination ul > li > a:focus,
+.pagination ul > li > a:hover > i,
+.pagination ul > li > a:focus > i,
+.pagination ul > .active > a,
+.pagination ul > .active > span {
+    color: #101820;
+}
+
+.pagination ul > .active > a,
+.pagination ul > .active > span {
+    cursor: default;
+}
+
+.pagination ul > .disabled > span,
+
+/* Mobile custom */
+.left {
+    float: right;
+}

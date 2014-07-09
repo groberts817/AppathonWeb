@@ -371,7 +371,6 @@ body {
 }
 #content {
     margin: 0 auto;
-    max-width: 70em; /* 1120px */
 }
 .search-form input[type="text"],
 .search-form textarea {
