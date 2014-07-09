@@ -774,7 +774,8 @@ section.main-content hr {
 .back-to-top {
     float: right;
     margin-right: 5px;
-    font-size: 10pt;
+    margin-top: 5px;
+    font-size: 12pt;
 }
 
 /* Selectize */
