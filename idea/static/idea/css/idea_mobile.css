@@ -129,7 +129,7 @@ textarea.populated {
 
 .project-add-idea {
     padding: 10px;
-    background: #41bb5c;
+    background: #05aaa6;
     color: #fff;
     border-radius: 5px;
     margin-bottom: 2.5em;
@@ -201,7 +201,7 @@ ul.section-nav li a:focus {
     background: #bcb6b2;
 }
 ul.section-nav li.active a {
-    background: #41bb5c;
+    background: #05aaa6;
     color: #FFF;
 }
 
@@ -765,7 +765,7 @@ section.main-content hr {
 }
 
 #vote_up{
-    background: #41bb5c;
+    background: #05aaa6;
     color: #fff;
 }
 

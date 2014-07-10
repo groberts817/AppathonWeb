@@ -267,12 +267,12 @@ dt {
 }
 
 /* Hyperlinks */
-a {
+a, a:visited {
     text-decoration: none;
-    color: royalblue;
+    color: #05aaa6;
 }
 a:hover {
-    color: midnightblue;
+    color: #036664;
     text-decoration: underline;
 }
 a:focus {
