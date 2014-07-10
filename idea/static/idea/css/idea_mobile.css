@@ -94,6 +94,9 @@ textarea.populated {
 }
 
 /* Header */
+.project-header {
+    display: none;
+}
 .project-header .row {
     padding: 0 0 .5em 0;
 }
