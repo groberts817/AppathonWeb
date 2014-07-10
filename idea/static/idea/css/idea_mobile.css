@@ -450,7 +450,7 @@ ul.section-nav li.active a {
 }
 .project-add form textarea {
     height: 5.25em;
-    max-width: 48.57142%;
+    max-width: 100%;
     padding-bottom: 1.25em;
 }
 .project-add form textarea#id_text {
@@ -466,12 +466,15 @@ ul.section-nav li.active a {
 .project-add textarea#id_summary,
 .project-add input#id_tags,
 .selectize-control {
-    width: 48.57142%;
+    width: 100%;
+    border: 1px solid #75787b;
+    border-radius: 5px;
     display: block;
+    box-sizing: border-box;
     margin: 0;
 }
 .project-add .textAreaCountMessage {
-    width: 48.57142%;
+    width: 100%;
     position: relative;
 }
 .project-add span[id$="textcount"] {
@@ -507,12 +510,13 @@ ul.section-nav li.active a {
     visibility: visible;
 }
 .form-field-footer {
+    display: none;
     position: relative;
 }
 .project-add .help_text {
     margin: 0;
     font-style: italic;
-    width: 48.57142%;
+    width: 100%;
     font-size: 0.875em;
     visibility: hidden;
     display: block;
@@ -537,8 +541,13 @@ ul.section-nav li.active a {
 }
 .project-add #add-idea-btn,
 .project-add .secondary-action {
-    margin-top: 1.625em;
-    margin-bottom: 2em;
+    margin-top: .25em;
+    margin-bottom: .25em;
+    width: 100%;
+}
+.project-add #add-idea-btn {
+    background: #05aaa6;
+    color: #fff;
 }
 .idea-hero {
     margin: 0;
