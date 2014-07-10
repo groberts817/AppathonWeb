@@ -40,7 +40,7 @@
                             <div class="count">{{idea.vote_count}}</div>
                             <div class="phrase">Like{{idea.vote_count|pluralize:",s"}}</div>
                             <div class="count">{{idea.downvote_count}}</div>
-                            <div class="phrase">Unlike{{idea.downvote_count|pluralize:",s"}}</div>
+                            <div class="phrase">Dislike{{idea.downvote_count|pluralize:",s"}}</div>
                             {% elif idea.state.name == 'Pending' %}
                             <div class="action">
                                 <form action="{% url 'idea:approve_idea' %}" method=POST>
@@ -64,7 +64,7 @@
                             </div>
                             {% elif user in idea.downvoters.all %}
                             <div class="action">
-                                <span class="btn btn-voted">UnLiked</span>
+                                <span class="btn btn-voted">Disliked</span>
                             </div>
                             {% else %}
                             <div class="action">
@@ -80,7 +80,7 @@
                                     {% csrf_token %}
                                     <input type="hidden" name="idea_id" value="{{idea.id}}"/>
                                     <input type="hidden" name="next" value="{% url 'idea:idea_list' 'vote' %}"/>
-                                    <input type="submit" class="btn btn-vote" value="UnLike" id="vote_down"/>
+                                    <input type="submit" class="btn btn-vote" value="Dislike" id="vote_down"/>
                                 </form>
                             </div>
                             {% endif %}
