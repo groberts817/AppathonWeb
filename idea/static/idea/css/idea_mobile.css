@@ -4,7 +4,7 @@
 /* Base */
 body {
     background: #eee;
-    max-width: 100%;
+    box-sizing: border-box;
     padding: 10px;
 }
 a:hover {
@@ -220,7 +220,8 @@ ul.section-nav li.active a {
 }
 .idea-entry .idea-votes {
     text-align: center;
-    width: 5em;
+    width: 25%;
+    min-width: 5em;
 }
 .idea-entry .idea-votes div {
     display: block;
@@ -252,7 +253,8 @@ ul.section-nav li.active a {
     display: inline-block;
 }
 .idea-votes .btn-vote, .idea-votes .btn-voted {
-    width: 5em;
+    width: 100%;
+    min-width: 5em;
 }
 .idea-single .action {
     width: 49%;
@@ -411,7 +413,7 @@ ul.section-nav li.active a {
     margin: 20px 0;
 }
 .tags {
-    display: none;
+    margin-top: 1em;
 }
 .tags .tag {
     display: block;
@@ -570,7 +572,7 @@ ul.section-nav li.active a {
     border-bottom: 3px solid #000;
 }
 #work_tag_submit_btn {
-    margin-top: .5em;
+    margin-top: 0;
 }
 span.btn-voted,
 span.btn-voted:hover {
@@ -708,7 +710,8 @@ h1, h2, h3, h4 {
     padding: 0;
 }
 h3 {
-    font-size: 18pt;
+    font-size: 16pt;
+    font-weight: 200;
 }
 h4 {
     font-weight: 200;
@@ -770,7 +773,8 @@ section.main-content hr {
 .back-to-top {
     float: right;
     margin-right: 5px;
-    font-size: 10pt;
+    margin-top: 5px;
+    font-size: 12pt;
 }
 
 /* Selectize */
@@ -865,4 +869,14 @@ section.main-content hr {
 /* Mobile custom */
 .left {
     float: right;
+}
+.comment {
+    padding-bottom: 0;
+}
+.comment-author {
+    margin-bottom: 0;
+}
+.comment-content p {
+    margin-top: 0;
+    margin-bottom: 7px;
 }
