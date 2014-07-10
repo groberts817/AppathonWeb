@@ -434,6 +434,9 @@ ul.section-nav li.active a {
     display: block;
     margin: 0;
 }
+input.tags_autocomplete {
+    border-radius: 5px;
+}
 .project-add .textAreaCountMessage {
     width: 100%;
     position: relative;
