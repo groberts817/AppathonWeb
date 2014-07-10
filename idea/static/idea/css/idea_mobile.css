@@ -594,6 +594,7 @@ ul.section-nav li.active a {
 }
 #work_tag_submit_btn {
     margin-top: 0;
+    background: #ccc;
 }
 span.btn-voted,
 span.btn-voted:hover {
