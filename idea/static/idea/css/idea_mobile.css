@@ -549,6 +549,9 @@ ul.section-nav li.active a {
     background: #05aaa6;
     color: #fff;
 }
+.project-add .secondary-action {
+    background: #555;
+}
 .idea-hero {
     margin: 0;
 }
