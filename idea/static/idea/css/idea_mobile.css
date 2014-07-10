@@ -789,6 +789,7 @@ section.main-content hr {
 }
 
 .back-to-top {
+    display: none;
     float: right;
     margin-right: 5px;
     margin-top: 5px;
