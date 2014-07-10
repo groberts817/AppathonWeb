@@ -37,9 +37,15 @@
                                 </form>
                             </div>
                         {% elif support %}
-                        <div class="action">
-                            <span class="btn btn-voted">Voted</span>
-                        </div>
+                            {% if user in idea.voters.all %}
+                            <div class="action">
+                                <span class="btn btn-voted">Liked</span>
+                            </div>
+                            {% elif user in idea.downvoters.all %}
+                            <div class="action">
+                                <span class="btn btn-voted">Disliked</span>
+                            </div>
+                            {% endif %}
                         {% else %}
                         <div class="action">
                             <form action="{% url 'idea:upvote_idea' %}" method=POST>
