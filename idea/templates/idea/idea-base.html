@@ -3,7 +3,7 @@
 {% block "css_files" %}
 {% if mobile %}
     <link rel="stylesheet" href="{{ STATIC_URL }}idea/css/idea_mobile.css">
-	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
         {% else %}
         <link rel="stylesheet" href="{{ STATIC_URL }}idea/css/idea.css">
             {% endif %}
