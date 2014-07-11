@@ -560,6 +560,7 @@ span.btn-voted:hover {
     color: #75787B;
     background-color: #E3E4E5;
     cursor: default;
+    display: inline-block;
 }
 .idea-add .alert {
     color: #d14124;
