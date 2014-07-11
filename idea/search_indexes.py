@@ -1,18 +1,41 @@
 from haystack import indexes
-from models import Idea, Banner
+from idea.models import Idea, Banner, State, Vote, DownVote
 from django.core.urlresolvers import reverse
 from time import mktime, strptime
 from django_cron import CronJobBase, Schedule
+from django.core.mail import send_mail
+from datetime import datetime, timedelta
+from push_notifications.models import APNSDevice, GCMDevice
+from django.contrib.auth.models import SiteProfileNotAvailable, User
+from django.utils import timezone
 
-class MyCronJob(CronJobBase):
-    RUN_EVERY_MINS = 120 # every 2 hours
-    
+class ArchiveIdeas(CronJobBase):
+    RUN_EVERY_MINS = 10
+
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code = 'my_app.my_cron_job'    # a unique code
+    code = 'AppathonWeb.idea_archive_cron_job'
     
     def do(self):
-        pass    # do your thing here
-
+        allideas = Idea.objects.related_with_counts()
+        ideas = allideas.filter(state=State.objects.get(name='Active'))
+        
+        for idea in ideas:
+            votes = idea.voters.count() + idea.downvoters.count()
+            if votes > 200: #idea needs more than 200 votes
+                if (idea.voters/votes) >= 0.5: #idea needs to have 50 percent or more likes
+                    send_mail('Idea has hit the threshold!', 'Idea has hit the threshold! http://ec2-54-88-16-5.compute-1.amazonaws.com/idea/detail/' + str(idea.id), 'AgilexIdeaBox@gmail.com', User.objects.filter(groups__name='BigWigs').values_list('email',flat=True), fail_silently=True)
+                    devices = GCMDevice.objects.filter(user__groups__name='BigWigs')
+                    devices.send_message("Idea has hit the threshold!", extra={"id": idea.id})
+                    devices = APNSDevice.objects.filter(user__groups__name='BigWigs')
+                    devices.send_message(None, sound="", content_available=True, extra={"id": idea.id, "msg": "Idea has hit the threshold!"})
+            if  (timezone.now() - timedelta(days=7)) <= idea.time <= timezone.now():
+                idea.state = State.objects.get(name='Archive')
+                idea.save()
+                send_mail('Idea has been Archived', 'Idea has been Archived! http://ec2-54-88-16-5.compute-1.amazonaws.com/idea/detail/' + str(idea.id), 'AgilexIdeaBox@gmail.com', User.objects.filter(groups__name='BigWigs').values_list('email',flat=True), fail_silently=True)
+                devices = GCMDevice.objects.filter(user__groups__name='Approvers')
+                devices.send_message("Idea has been Archived!", extra={"id": idea.id})
+                devices = APNSDevice.objects.filter(user__groups__name='Approvers')
+                devices.send_message(None, sound="", content_available=True, extra={"id": idea.id, "msg": "Idea has been Archived!"})
 
 class IdeaIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.EdgeNgramField(document=True, use_template=True)

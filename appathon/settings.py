@@ -65,7 +65,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 CRON_CLASSES = [
-    "idea.search_indexes.MyCronJob",
+	"idea.search_indexes.ArchiveIdeas",
 ]
 
 ROOT_URLCONF = 'appathon.urls'
