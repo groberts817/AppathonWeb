@@ -347,6 +347,12 @@ def detail(request, idea_id):
 
 @login_required
 def add_idea(request, banner_id=None):
+    
+    if 'Mobile' in request.META['HTTP_USER_AGENT']:
+        mobile = True
+    else:
+        mobile = False
+
     if request.method == 'POST':
         matching_ideas = Idea.objects.filter(
             creator=request.user,
@@ -379,7 +385,7 @@ def add_idea(request, banner_id=None):
                     form.fields.pop('banner')
                     form.fields.pop('challenge-checkbox')
                 form.set_error_css()
-                return _render(request, 'idea/add.html', {'form': form, })
+                return _render(request, 'idea/add.html', {'form': form, 'mobile':mobile, })
         else:
             return HttpResponse('Idea is archived', status=403)
     else:
@@ -397,7 +403,7 @@ def add_idea(request, banner_id=None):
             form = IdeaForm(initial={'title': idea_title, 'banner': banner})
             form.fields["banner"].queryset = current_banners
         return _render(request, 'idea/add.html', {
-            'form': form#,
+            'form': form, 'mobile':mobile, #,
             #'similar': [r.object for r in more_like_text(idea_title, Idea)]
         })
 
