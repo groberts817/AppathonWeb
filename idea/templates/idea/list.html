@@ -41,7 +41,7 @@
                             <div class="phrase">Like{{idea.vote_count|pluralize:",s"}}</div>
                             <div class="count">{{idea.downvote_count}}</div>
                             <div class="phrase">Dislike{{idea.downvote_count|pluralize:",s"}}</div>
-                            {% elif idea.state.name == 'Pending' %}
+                            {% elif idea.state.name == 'Pending' and perms.idea.change_state %}
                             <div class="action">
                                 <form action="{% url 'idea:approve_idea' %}" method=POST>
                                     {% csrf_token %}
@@ -57,6 +57,10 @@
                                     <input type="hidden" name="next" value="{% url 'idea:idea_list' %}"/>
                                     <input type="submit" class="btn btn-vote" value="Reject" id="reject"/>
                                 </form>
+                            </div>
+                            {% elif idea.state.name == 'Pending' %}
+                            <div class="action">
+                                <span class="btn btn-voted">Pending</span>
                             </div>
                             {% elif user in idea.voters.all %}
                             <div class="action">

@@ -210,7 +210,7 @@ def down_vote(request):
 @require_POST
 def approve_idea(request):
     form = ApproveForm(request.POST)
-    if form.is_valid():
+    if form.is_valid() and request.user.has_perm('idea.change_state'):
         idea_id = form.cleaned_data['idea_id']
         next_url = form.cleaned_data['next']
     
@@ -228,7 +228,7 @@ def approve_idea(request):
 @require_POST
 def reject_idea(request):
     form = RejectForm(request.POST)
-    if form.is_valid():
+    if form.is_valid() and request.user.has_perm('idea.change_state'):
         idea_id = form.cleaned_data['idea_id']
         next_url = form.cleaned_data['next']
         
