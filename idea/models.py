@@ -110,6 +110,9 @@ class Idea(UserTrackable):
     downvoters = models.ManyToManyField(User, through="DownVote", null=True,
                                     related_name="idea_downvote_creator")
 
+    approvalTime = models.DateTimeField(null=True, blank=True)
+    archiveTime = models.DateTimeField(null=True, blank=True)
+    
     def __unicode__(self):
         return u'%s' % self.title
 

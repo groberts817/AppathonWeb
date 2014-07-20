@@ -1,7 +1,7 @@
 {% extends "idea/idea-base.html" %}
 
 {% block "content" %}
-
+{% load add_seven_days %}
 <div id="content" class="idea-home ic" role="main">
     <div class="left span9">
         <section id="idea-hero" class="idea-hero">
@@ -101,7 +101,17 @@
                             </div>
                             <footer class="idea-footer">
                                 <div class="idea-info">
-                                    <span class="commented"><a href="{% url 'idea:idea_detail' idea.id %}#comments">{{idea.comment_count}} Comment{{idea.comment_count|pluralize:",s"}}</a></span> | <span class="suggested">Suggested on {{idea.time|date:"M d, Y"}}</span>
+                                    <span class="commented"><a href="{% url 'idea:idea_detail' idea.id %}#comments">{{idea.comment_count}} Comment{{idea.comment_count|pluralize:",s"}}</a></span> | <span class="suggested">
+                                        {% if idea.state.name == 'Pending' %}
+                                            Suggested {{ idea.time|timesince }} ago
+                                        {% elif idea.state.name == 'Active' and idea.approvalTime %}
+                                            {{ idea.approvalTime|add_seven_days|timeuntil }} left to vote
+                                        {% elif idea.state.name == 'Archive' and idea.archiveTime %}
+                                            Archived {{ idea.archiveTime|timesince }} ago
+                                        {% else %}
+                                            Suggested on {{idea.time|date:"M d, Y"}}
+                                        {% endif %}
+                                        </span>
                                 </div><!-- /idea-info -->
                             </footer>
                         </div><!-- /idea-wrap -->

@@ -19,6 +19,8 @@ from idea.models import Idea, State, Vote, DownVote, Banner, Config
 from idea.utility import state_helper
 from idea.models import UP_VOTE, DOWN_VOTE
 from push_notifications.models import APNSDevice, GCMDevice
+from django.utils import timezone
+from itertools import chain
 
 try:
     from core.taggit.models import Tag, TaggedItem
@@ -86,27 +88,23 @@ def list(request, sort_or_state=None):
 
     #   URL Filter - either archive or one of the sorts
     if sort_or_state == 'pending':
-        ideas = ideas.filter(state=State.objects.get(name='Pending')
-                         ).order_by('-time')
+        ideas = ideas.filter(state=State.objects.get(name='Pending'))
+        ideaList = ideas.order_by('-time')
     elif sort_or_state == 'likes':
         ideas = ideas.filter(state=State.objects.get(name='Archive')
                              ).order_by('-vote_count')
+        ideaList = None
     elif sort_or_state == 'recent':
         ideas = ideas.filter(state=State.objects.get(name='Archive')
                          ).order_by('-time')
+        ideaList = None
     else:
         sort_or_state = 'vote'
-        ideas = ideas.filter(state=State.objects.get(name='Active')).order_by('time')
-
-    IDEAS_PER_PAGE = getattr(settings, 'IDEAS_PER_PAGE', 10)
-    pager = Paginator(ideas, IDEAS_PER_PAGE)
-    #   Boiler plate paging -- @todo abstract this
-    try:
-        page = pager.page(page_num)
-    except PageNotAnInteger:
-        page = pager.page(1)
-    except EmptyPage:
-        page = pager.page(pager.num_pages)
+        ideas = ideas.filter(state=State.objects.get(name='Active'))
+        #This is so we have ideas that have not been voted on at the top, and ideas that have already been voted on at the bottom
+        notVoted = ideas.exclude(voters__id__exact=request.user.id).exclude(downvoters__id__exact=request.user.id).order_by('approvalTime')
+        voted = ideas.filter(Q(voters__id__exact=request.user.id) | Q(downvoters__id__exact=request.user.id)).order_by('approvalTime')
+        ideaList = chain(notVoted, voted)
 
     #   List of tags
     tags = Tag.objects.filter(
@@ -130,6 +128,19 @@ def list(request, sort_or_state=None):
                                                   args=(sort_or_state,)),
                                           tag_slugs)
 
+    #ideaList from the 'vote' state doesn't have a length, so no pagination...
+    if ideaList == None:
+        IDEAS_PER_PAGE = getattr(settings, 'IDEAS_PER_PAGE', 10)
+        pager = Paginator(ideas, IDEAS_PER_PAGE)
+        #   Boiler plate paging -- @todo abstract this
+        try:
+            page = pager.page(page_num)
+        except PageNotAnInteger:
+            page = pager.page(1)
+        except EmptyPage:
+            page = pager.page(pager.num_pages)
+        ideaList = page
+
     banner = get_banner()
     try:
         about_text = Config.objects.get(
@@ -145,7 +156,7 @@ def list(request, sort_or_state=None):
 
     return _render(request, 'idea/list.html', {
                    'sort_or_state': sort_or_state,
-                   'ideas': page,
+                   'ideas': ideaList,
                    'tags': tags,  # list of popular tags
                    'banner': banner,
                    'about_text': about_text,
@@ -216,6 +227,7 @@ def approve_idea(request):
     
         idea = Idea.objects.get(pk=idea_id)
         idea.state = State.objects.get(name='Active')
+        idea.approvalTime = timezone.now()
         idea.save()
         send_mail('New Idea Posted', 'New idea posted! http://ec2-54-88-16-5.compute-1.amazonaws.com/idea/detail/' + str(idea.id), 'AgilexIdeaBox@gmail.com', User.objects.values_list('email',flat=True), fail_silently=True)
         devices = GCMDevice.objects.all()
@@ -234,6 +246,7 @@ def reject_idea(request):
         
         idea = Idea.objects.get(pk=idea_id)
         idea.state = State.objects.get(name='Rejected')
+        idea.approvalTime = timezone.now()
         idea.save()
         return HttpResponseRedirect(next_url)
 
